@@ -10,6 +10,8 @@
         <id property='tipo_id' column='tipo_id' typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
         <result property='fechaNacimiento' column='fecha_nacimiento'/>
         <result property='nombre' column='nombre'/>
+        <collection property='consultas' ofType='Consulta' resultMap='edu.eci.pdsw.samples.persistence.mybatisimpl.mappers.ConsultaMapper.ConsultaResult' columnPrefix="c_"></collection>
+
     </resultMap>
 
     <select id="getPacientes" resultMap="PacienteResult">
@@ -21,4 +23,36 @@
         FROM
             PACIENTES as p
     </select>
+    <select parameterType="map" id="getPaciente" resultMap="PacienteResult">
+        select 
+	p.id,
+	p.tipo_id,
+	p.fecha_nacimiento,
+	p.nombre,
+	c.idCONSULTAS as c_idCONSULTAS,
+	c.fecha_y_hora as c_fecha_y_hora,
+	c.resumen as c_resumen
+	
+	FROM PACIENTES as p
+	join CONSULTAS as c ON p.id = c.PACIENTES_id
+        where p.id = #{pid} and p.tipo_id=#{tid}
+        ORDER BY c.fecha_y_hora desc
+    </select>
+    <select parameterType="map" id="getEnfermos" resultMap="PacienteResult">
+        select 
+	p.id,
+	p.tipo_id,
+	p.fecha_nacimiento,
+	p.nombre,
+	c.idCONSULTAS,
+	c.fecha_y_hora,
+	c.resumen
+	
+	FROM PACIENTES as p
+	join CONSULTAS as c ON p.id = c.PACIENTES_id
+	WHERE NOW()-p.fecha_nacimiento>18 and
+	c.resumen LIKE '%hepatitis%' OR c.resumen LIKE '%varicela%'
+        ORDER BY NOW()-p.fecha_nacimiento desc
+    </select>
+    
 </mapper>

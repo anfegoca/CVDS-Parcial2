@@ -21,6 +21,7 @@ import edu.eci.pdsw.samples.entities.TipoIdentificacion;
 import edu.eci.pdsw.samples.services.ExcepcionServiciosSuscripciones;
 import edu.eci.pdsw.samples.services.ServiciosPacientesFactory;
 import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -33,6 +34,8 @@ import javax.faces.bean.SessionScoped;
 public class PacientesBean {
 
     TipoIdentificacion tipoIdentificacion = TipoIdentificacion.CC;
+    
+    Paciente paciente;
 
     public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
@@ -54,6 +57,28 @@ public class PacientesBean {
 
     public TipoIdentificacion[] getTiposIdentificacion() {
         return TipoIdentificacion.values();
+    }
+    public void consultarPaciente(int id,TipoIdentificacion tipoIdentificacion) throws ExcepcionServiciosSuscripciones{
+        try {
+            paciente=ServiciosPacientesFactory.getInstance().getForumsServices().consultarPacientesPorId(id, tipoIdentificacion);
+        } catch (ExcepcionServiciosSuscripciones ex) {
+            throw new ExcepcionServiciosSuscripciones("Error al consultar paciente"+id,ex);
+        }
+    }
+    public List<Paciente> enfermos() throws ExcepcionServiciosSuscripciones{
+        try {
+            return ServiciosPacientesFactory.getInstance().getForumsServices().consultarMenoresConEnfermedadContagiosa();
+        } catch (ExcepcionServiciosSuscripciones ex) {
+            throw new ExcepcionServiciosSuscripciones("Error al consultar pacientes",ex);
+        }
+    }
+    
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
     
 }

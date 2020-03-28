@@ -3,22 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title></title>
     </h:head>
     <h:body>
-        <h1>TITULO</h1>
-        <h:form>
+        
+        <center>
+            <h1>Consulta paciente</h1>
+        <h:form id="formPaciente">
             <!--Por favor no cambiar el 'id':-->
-            <p:inputText id="identificacion_paciente"></p:inputText>
-            <p:selectOneMenu value="#{mb.tipoIdentificacion}" >
+            <p:inputText id="identificacion_paciente" binding="#{id}"></p:inputText>
+            <p:selectOneMenu value="#{mb.tipoIdentificacion}" binding="#{tid}" >
                 <f:selectItems value="#{mb.tiposIdentificacion}" />
             </p:selectOneMenu>
             <!--Por favor no cambiar el 'value':-->
-            <p:commandButton value="Consultar"></p:commandButton>
+            <p:commandButton update="formPaciente" value="Consultar" actionListener="#{mb.consultarPaciente(id.value, tid.value)}"></p:commandButton>
+            
+            <h:panelGrid columns="1">
+                <h:outputLabel value="Fecha nacimiento"/>
+                <p:outputLabel value="#{mb.paciente.fechaNacimiento}"></p:outputLabel>
+                <h:outputLabel value="Nombre"/>
+                <p:outputLabel value="#{mb.paciente.nombre}"></p:outputLabel>
+                <p:dataTable value="#{mb.paciente.consultas}" var="con">
+                    <p:column headerText="Fecha y hora">
+                        <p:outputLabel value="#{con.fechayHora}"></p:outputLabel>
+                    </p:column><p:column headerText="Resumen">
+                        <p:outputLabel value="#{con.resumen}"></p:outputLabel>
+                    </p:column>
+     
+                </p:dataTable>
+
+            </h:panelGrid>
+            
+           
         </h:form>
+        </center>
     </h:body>
 </html>
 

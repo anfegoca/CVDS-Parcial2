@@ -53,6 +53,24 @@
 	WHERE NOW()-p.fecha_nacimiento>18 and
 	c.resumen LIKE '%hepatitis%' OR c.resumen LIKE '%varicela%'
         ORDER BY NOW()-p.fecha_nacimiento desc
+        
+        <!-- Esta es la correcta
+        select 
+	p.id,
+	p.tipo_id,
+	p.fecha_nacimiento,
+	p.nombre,
+	c.idCONSULTAS,
+	c.fecha_y_hora,
+	c.resumen
+	
+	FROM PACIENTES as p
+	join CONSULTAS as c ON p.id = c.PACIENTES_id
+	WHERE TIMESTAMPDIFF(YEAR, p.fecha_nacimiento, NOW())<18 and
+	c.resumen LIKE '%hepatitis%' OR c.resumen LIKE '%varicela%'
+	ORDER BY TIMESTAMPDIFF(YEAR, p.fecha_nacimiento, NOW()) DESC
+    
+    -->
     </select>
     
 </mapper>
